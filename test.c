@@ -5,9 +5,9 @@
 int main(void) {
     Cancas cancas;
     cancasInit(&cancas, 5, 5);
-    printf("Created cancas with %zux%zu dimension.\n", cancas.width, cancas.height);
     cancas.pixels[1] = 0xFF0000FF;
-    cancasSaveToPPM(&cancas, "test.ppm");
+    cancasSaveToPPM(&cancas, "testP3.ppm");
+    cancasSaveToReadablePPM(&cancas, "testP6.ppm");
 
     cancasDestroy(&cancas);
 
