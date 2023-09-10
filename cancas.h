@@ -69,7 +69,7 @@ CANCAS void cancasInit(Cancas* c, size_t width, size_t height) {
     c->height = height;
     c->pixels = (uint32_t*) malloc(sizeof(uint32_t) * width * height);
     assert(c->pixels != NULL && "Memory allocation of pixels failed. More RAM needed?"); // Makes sense to finish the program
-    memset(c->pixels, 0x00000000, width * height);
+    memset(c->pixels, 0x00000000, sizeof(uint32_t) * width * height);
 }
 
 CANCAS void cancasDestroy(Cancas* c) {
