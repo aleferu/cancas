@@ -1,6 +1,13 @@
 #define CANCAS_IMPLEMENTATION
 #include "cancas.h"
 
+void fillTest(Cancas* c, const char* filename) {
+    cancasInit(c, 10, 10);
+    cancasFill(c, 0xFF00FF00);
+    cancasSaveToReadablePPM(c, filename);
+    cancasDestroy(c);
+}
+
 void pixelTest(Cancas* c, const char* filename) {
     cancasInit(c, 5, 3);
     cancasDrawPixel(c, 2, 1, 0xFF0000FF);
@@ -20,6 +27,7 @@ int main(void) {
     Cancas c = {0};
     pixelTest(&c, "pixelTest.ppm");
     lineTest(&c, "lineTest.ppm");
+    fillTest(&c, "fillTest.ppm");
 
     return 0;
 }

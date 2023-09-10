@@ -53,6 +53,7 @@ CANCAS void cancasInit(Cancas* c, size_t width, size_t height);
 CANCAS void cancasDestroy(Cancas* c);
 CANCAS void cancasSaveToPPM(Cancas* c, const char* name);
 CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name);
+CANCAS inline void cancasFill(Cancas* c, uint32_t color);
 CANCAS inline void cancasDrawPixel(Cancas* c, int x, int y, uint32_t color);
 CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
 
@@ -69,7 +70,7 @@ CANCAS void cancasInit(Cancas* c, size_t width, size_t height) {
     c->height = height;
     c->pixels = (uint32_t*) malloc(sizeof(uint32_t) * width * height);
     assert(c->pixels != NULL && "Memory allocation of pixels failed. More RAM needed?"); // Makes sense to finish the program
-    memset(c->pixels, 0x00000000, sizeof(uint32_t) * width * height);
+    cancasFill(c, 0xFF000000);
 }
 
 CANCAS void cancasDestroy(Cancas* c) {
@@ -81,7 +82,6 @@ CANCAS void cancasDestroy(Cancas* c) {
 
 
 CANCAS void cancasSaveToPPM(Cancas* c, const char* name) {
-
     FILE* f = fopen(name, "wb");
     if (!f) {
         fprintf(stderr, "Could not open file %s\n", name);
@@ -112,6 +112,12 @@ CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name) {
         fprintf(f, "%u %u %u\n", r, g, b);
     }
     fclose(f);
+}
+
+CANCAS inline void cancasFill(Cancas* c, uint32_t color) {
+    for (size_t i = 0; i < c->width * c->height; ++i) {
+        c->pixels[i] = color;
+    }
 }
 
 CANCAS inline void cancasDrawPixel(Cancas* c, int x, int y, uint32_t color) {
