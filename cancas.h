@@ -53,8 +53,8 @@ CANCAS void cancasInit(Cancas* c, size_t width, size_t height);
 CANCAS void cancasDestroy(Cancas* c);
 CANCAS void cancasSaveToPPM(Cancas* c, const char* name);
 CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name);
-CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
 CANCAS inline void cancasDrawPixel(Cancas* c, int x, int y, uint32_t color);
+CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
 
 #ifdef __cplusplus
 }
