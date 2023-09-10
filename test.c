@@ -19,6 +19,7 @@ void lineTest(Cancas* c, const char* filename) {
     cancasInit(c, 5, 5);
     cancasDrawLine(c, 0, 1, 4, 3, 0xFFFF00FF);
     cancasDrawLine(c, 0, 4, 17, 17, 0xFFFFFFFF);
+    cancasDrawLine(c, -5, -5, 1, 0, 0xFF00FFFF);
     cancasSaveToReadablePPM(c, filename);
     cancasDestroy(c);
 }
