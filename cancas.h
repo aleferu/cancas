@@ -22,12 +22,15 @@
 #ifndef CANCAS_H_
 #define CANCAS_H_
 
-#include <stdint.h>
-#include <stdio.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include <stdint.h>
+
+#ifndef CANCAS_NO_STDIO
+#include <stdio.h>
+#endif // CANCAS_NO_STDIO
 
 #ifndef CANCAS_ASSERT
 #include <assert.h>
@@ -63,11 +66,13 @@ typedef struct {
 
 CANCAS void cancasInit(Cancas* c, size_t width, size_t height);
 CANCAS void cancasDestroy(Cancas* c);
-CANCAS void cancasSaveToPPM(Cancas* c, const char* name);
-CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name);
 CANCAS inline void cancasFill(Cancas* c, uint32_t color);
 CANCAS inline void cancasDrawPixel(Cancas* c, int x, int y, uint32_t color);
 CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
+#ifndef CANCAS_NO_STDIO
+CANCAS void cancasSaveToPPM(Cancas* c, const char* name);
+CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name);
+#endif // CANCAS_NO_STDIO
 
 #ifdef __cplusplus
 }
@@ -90,40 +95,6 @@ CANCAS void cancasDestroy(Cancas* c) {
         CANCAS_FREE(c->pixels);
         c->pixels = NULL;
     }
-}
-
-
-CANCAS void cancasSaveToPPM(Cancas* c, const char* name) {
-    FILE* f = fopen(name, "wb");
-    if (!f) {
-        fprintf(stderr, "Could not open file %s\n", name);
-        return;
-    }
-    fprintf(f, "P6\n%zu %zu\n255\n", c->width, c->height);
-    uint8_t buff[3];
-    for (size_t i = 0; i < (c->width * c->height); ++i) {
-        buff[0] = c->pixels[i] >> (8 * 0) & 0xFF;
-        buff[1] = c->pixels[i] >> (8 * 1) & 0xFF;
-        buff[2] = c->pixels[i] >> (8 * 2) & 0xFF;
-        fwrite(buff, sizeof(uint8_t), 3, f);
-    }
-    fclose(f);
-}
-
-CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name) {
-    FILE* f = fopen(name, "wb");
-    if (!f) {
-        fprintf(stderr, "Could not open file %s\n", name);
-        return;
-    }
-    fprintf(f, "P3\n%zu %zu\n255\n", c->width, c->height);
-    for (size_t i = 0; i < (c->width * c->height); ++i) {
-        uint8_t r = c->pixels[i] >> (8 * 0) & 0xFF;
-        uint8_t g = c->pixels[i] >> (8 * 1) & 0xFF;
-        uint8_t b = c->pixels[i] >> (8 * 2) & 0xFF;
-        fprintf(f, "%u %u %u\n", r, g, b);
-    }
-    fclose(f);
 }
 
 CANCAS inline void cancasFill(Cancas* c, uint32_t color) {
@@ -159,5 +130,40 @@ CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t c
         cancasDrawPixel(c, x0, y0, color);
     }
 }
+
+#ifndef CANCAS_NO_STDIO
+CANCAS void cancasSaveToPPM(Cancas* c, const char* name) {
+    FILE* f = fopen(name, "wb");
+    if (!f) {
+        fprintf(stderr, "Could not open file %s\n", name);
+        return;
+    }
+    fprintf(f, "P6\n%zu %zu\n255\n", c->width, c->height);
+    uint8_t buff[3];
+    for (size_t i = 0; i < (c->width * c->height); ++i) {
+        buff[0] = c->pixels[i] >> (8 * 0) & 0xFF;
+        buff[1] = c->pixels[i] >> (8 * 1) & 0xFF;
+        buff[2] = c->pixels[i] >> (8 * 2) & 0xFF;
+        fwrite(buff, sizeof(uint8_t), 3, f);
+    }
+    fclose(f);
+}
+
+CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name) {
+    FILE* f = fopen(name, "wb");
+    if (!f) {
+        fprintf(stderr, "Could not open file %s\n", name);
+        return;
+    }
+    fprintf(f, "P3\n%zu %zu\n255\n", c->width, c->height);
+    for (size_t i = 0; i < (c->width * c->height); ++i) {
+        uint8_t r = c->pixels[i] >> (8 * 0) & 0xFF;
+        uint8_t g = c->pixels[i] >> (8 * 1) & 0xFF;
+        uint8_t b = c->pixels[i] >> (8 * 2) & 0xFF;
+        fprintf(f, "%u %u %u\n", r, g, b);
+    }
+    fclose(f);
+}
+#endif // CANCAS_NO_STDIO
 
 #endif // CANCAS_IMPLEMENTATION
