@@ -69,6 +69,8 @@ CANCAS void cancasDestroy(Cancas* c);
 CANCAS inline void cancasFill(Cancas* c, uint32_t color);
 CANCAS inline void cancasDrawPixel(Cancas* c, int x, int y, uint32_t color);
 CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
+CANCAS void cancasDrawRect(Cancas* c, int x, int y, int w, int h, uint32_t color);
+CANCAS void cancasDrawRectCoords(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
 #ifndef CANCAS_NO_STDIO
 CANCAS void cancasSaveToPPM(Cancas* c, const char* name);
 CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name);
@@ -129,6 +131,24 @@ CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t c
     } else {
         cancasDrawPixel(c, x0, y0, color);
     }
+}
+
+CANCAS void cancasDrawRect(Cancas* c, int x, int y, int w, int h, uint32_t color) {
+    int xSign = w >= 0 ? 1 : -1;
+    int ySign = h >= 0 ? 1 : -1;
+    for (int i = 0; i < CANCAS_ABS(w); ++i) {
+        for (int j = 0; j < CANCAS_ABS(h); ++j) {
+            cancasDrawPixel(c, x + i * xSign, y + j * ySign, color);
+        }
+    }
+}
+
+CANCAS void cancasDrawRectCoords(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color) {
+    int xdif = x1 - x0;
+    int ydif = y1 - y0;
+    xdif = xdif >= 0 ? xdif + 1 : xdif - 1;
+    ydif = ydif >= 0 ? ydif + 1 : ydif - 1;
+    cancasDrawRect(c, x0, y0, xdif, ydif, color);
 }
 
 #ifndef CANCAS_NO_STDIO
