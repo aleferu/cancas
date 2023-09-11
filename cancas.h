@@ -22,18 +22,27 @@
 #ifndef CANCAS_H_
 #define CANCAS_H_
 
-#include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef CANCAS_ASSERT
 #include <assert.h>
 #define CANCAS_ASSERT assert
 #endif // CANCAS_ASSERT
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#if !defined(CANCAS_MALLOC) && !defined(CANCAS_FREE)
+#include <stdlib.h>
+#define CANCAS_MALLOC malloc
+#define CANCAS_FREE free
+#elif defined(CANCAS_MALLOC) && defined(CANCAS_MALLOC)
+// ok, custom
+#else
+#error "Must define all or none of CANCAS_MALLOC and CANCAS_FREE"
+#endif // CANCAS_MALLOC CANCAS_FREE
 
 #ifndef CANCAS
 #ifdef CANCAS_STATIC
@@ -71,14 +80,14 @@ CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t c
 CANCAS void cancasInit(Cancas* c, size_t width, size_t height) {
     c->width = width;
     c->height = height;
-    c->pixels = (uint32_t*) malloc(sizeof(uint32_t) * width * height);
+    c->pixels = (uint32_t*) CANCAS_MALLOC(sizeof(uint32_t) * width * height);
     CANCAS_ASSERT(c->pixels != NULL && "Memory allocation of pixels failed. More RAM needed?"); // Makes sense to finish the program
     cancasFill(c, 0xFF000000);
 }
 
 CANCAS void cancasDestroy(Cancas* c) {
     if (c->pixels != NULL) {
-        free(c->pixels);
+        CANCAS_FREE(c->pixels);
         c->pixels = NULL;
     }
 }
