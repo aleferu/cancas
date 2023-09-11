@@ -22,10 +22,14 @@
 #ifndef CANCAS_H_
 #define CANCAS_H_
 
-#include <assert.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
+
+#ifndef CANCAS_ASSERT
+#include <assert.h>
+#define CANCAS_ASSERT assert
+#endif // CANCAS_ASSERT
 
 #ifdef __cplusplus
 extern "C" {
@@ -68,7 +72,7 @@ CANCAS void cancasInit(Cancas* c, size_t width, size_t height) {
     c->width = width;
     c->height = height;
     c->pixels = (uint32_t*) malloc(sizeof(uint32_t) * width * height);
-    assert(c->pixels != NULL && "Memory allocation of pixels failed. More RAM needed?"); // Makes sense to finish the program
+    CANCAS_ASSERT(c->pixels != NULL && "Memory allocation of pixels failed. More RAM needed?"); // Makes sense to finish the program
     cancasFill(c, 0xFF000000);
 }
 
