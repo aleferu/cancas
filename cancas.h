@@ -57,7 +57,6 @@ extern "C" {
 
 #define CANCAS_ABS(x) (x >= 0 ? x : -x)
 #define CANCAS_MAX(x, y) (x >= y ? x : y)
-// #define CANCAS_ROUND(x) (x >= 0 ? (int) (x + 0.5) : (int) (x - 0.5))
 
 typedef struct {
     uint32_t* pixels;
@@ -65,6 +64,7 @@ typedef struct {
 } Cancas;
 
 CANCAS void cancasInit(Cancas* c, size_t width, size_t height);
+CANCAS void cancasInitColor(Cancas* c, size_t width, size_t height, uint32_t color);
 CANCAS void cancasDestroy(Cancas* c);
 CANCAS inline void cancasFill(Cancas* c, uint32_t color);
 CANCAS inline void cancasDrawPixel(Cancas* c, int x, int y, uint32_t color);
@@ -85,11 +85,15 @@ CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name);
 #ifdef CANCAS_IMPLEMENTATION
 
 CANCAS void cancasInit(Cancas* c, size_t width, size_t height) {
+    cancasInitColor(c, width, height, 0xFF000000);
+}
+
+CANCAS void cancasInitColor(Cancas* c, size_t width, size_t height, uint32_t color) {
     c->width = width;
     c->height = height;
     c->pixels = (uint32_t*) CANCAS_MALLOC(sizeof(uint32_t) * width * height);
     CANCAS_ASSERT(c->pixels != NULL && "Memory allocation of pixels failed. More RAM needed?"); // Makes sense to finish the program
-    cancasFill(c, 0xFF000000);
+    cancasFill(c, color);
 }
 
 CANCAS void cancasDestroy(Cancas* c) {
