@@ -115,6 +115,8 @@ CANCAS inline void cancasDrawPixel(Cancas* c, int x, int y, uint32_t color) {
 }
 
 CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color) {
+    // https://www.geeksforgeeks.org/dda-line-generation-algorithm-computer-graphics/
+    // Had to modify a little
     float dx = (float) CANCAS_ABS(x1 - x0);
     float dy = (float) CANCAS_ABS(y1 - y0);
     float steps = CANCAS_MAX(dx, dy);
