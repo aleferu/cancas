@@ -19,4 +19,4 @@ Remember to clear its memory using ```cancasDestroy```.
 
 ## Tests
 
-If you want to see examples you can take a look at ```test.c```. Build and run the file using ```build-tests.sh``` and running the generated file (```test```).
+If you want to see examples you can take a look at ```test.c```. Build and run the file using ```build-tests.sh``` and run the generated file (```run-tests```).
