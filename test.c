@@ -45,6 +45,34 @@ void lineTest(Cancas* c, const char* filename) {
     cancasDestroy(c);
 }
 
+void drawRectangleTest0(Cancas* c, const char* filename) {
+    cancasInit(c, 10, 10);
+    cancasDrawRect(c, 1, 1, 8, 8, 0xFF0000FF);
+    cancasSaveToPPM(c, filename);
+    cancasDestroy(c);
+}
+
+void drawRectangleTest1(Cancas* c, const char* filename) {
+    cancasInit(c, 10, 10);
+    cancasDrawRect(c, 8, 8, -8, -8, 0xFF0000FF);
+    cancasSaveToPPM(c, filename);
+    cancasDestroy(c);
+}
+
+void drawRectangleTest2(Cancas* c, const char* filename) {
+    cancasInit(c, 10, 10);
+    cancasDrawRect(c, 1, 1, 8, 8, 0xFF0000FF);
+    cancasSaveToPPM(c, filename);
+    cancasDestroy(c);
+}
+
+void drawRectangleCoordsTest(Cancas* c, const char* filename) {
+    cancasInit(c, 10, 10);
+    cancasDrawRectCoords(c, 1, 8, 8, 1, 0xFF0000FF);
+    cancasSaveToPPM(c, filename);
+    cancasDestroy(c);
+}
+
 void fillRectangleTest0(Cancas* c, const char* filename) {
     cancasInit(c, 10, 10);
     cancasFillRect(c, 1, 1, 8, 8, 0xFF0000FF);
@@ -78,6 +106,10 @@ int main(void) {
     pixelTest(&c, "pixelTest.ppm");
     lineTest(&c, "lineTest.ppm");
     fillTest(&c, "fillTest.ppm");
+    drawRectangleTest0(&c, "drawRectangleTest0.ppm");
+    drawRectangleTest1(&c, "drawRectangleTest1.ppm");
+    drawRectangleTest2(&c, "drawRectangleTest2.ppm");
+    drawRectangleCoordsTest(&c, "drawRectangleCoords.ppm");
     fillRectangleTest0(&c, "fillRectangleTest0.ppm");
     fillRectangleTest1(&c, "fillRectangleTest1.ppm");
     fillRectangleTest2(&c, "fillRectangleTest2.ppm");

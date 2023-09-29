@@ -55,8 +55,8 @@ extern "C" {
 #endif // CANCAS_STATIC
 #endif // CANCAS
 
-#define CANCAS_ABS(x) (x >= 0 ? x : -x)
-#define CANCAS_MAX(x, y) (x >= y ? x : y)
+#define CANCAS_ABS(x) ((x) >= 0 ? (x) : -(x))
+#define CANCAS_MAX(x, y) ((x) >= (y) ? (x) : (y))
 
 typedef struct {
     uint32_t* pixels;
@@ -69,6 +69,8 @@ CANCAS void cancasDestroy(Cancas* c);
 CANCAS inline void cancasFill(Cancas* c, uint32_t color);
 CANCAS inline void cancasDrawPixel(Cancas* c, int x, int y, uint32_t color);
 CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
+CANCAS void cancasDrawRect(Cancas* c, int x, int y, int w, int h, uint32_t color);
+CANCAS void cancasDrawRectCoords(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
 CANCAS void cancasFillRect(Cancas* c, int x, int y, int w, int h, uint32_t color);
 CANCAS void cancasFillRectCoords(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
 #ifndef CANCAS_NO_STDIO
@@ -137,6 +139,19 @@ CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t c
     } else {
         cancasDrawPixel(c, x0, y0, color);
     }
+}
+
+CANCAS void cancasDrawRect(Cancas* c, int x, int y, int w, int h, uint32_t color) {
+    int x_addition = CANCAS_ABS(w) == w ? 1 : -1;
+    int y_addition = CANCAS_ABS(h) == h ? 1 : -1;
+    cancasDrawRectCoords(c, x, y, x + w - x_addition, y + h - y_addition, color);
+}
+
+CANCAS void cancasDrawRectCoords(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color) {
+    cancasDrawLine(c, x0, y0, x1, y0, color); // up
+    cancasDrawLine(c, x0, y0, x0, y1, color); // left
+    cancasDrawLine(c, x1, y1, x1, y0, color); // right
+    cancasDrawLine(c, x1, y1, x0, y1, color); // down
 }
 
 CANCAS void cancasFillRect(Cancas* c, int x, int y, int w, int h, uint32_t color) {
