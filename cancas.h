@@ -154,7 +154,7 @@ CANCAS void cancasFillRectCoords(Cancas* c, int x0, int y0, int x1, int y1, uint
     int ydif = y1 - y0;
     xdif = xdif >= 0 ? xdif + 1 : xdif - 1;
     ydif = ydif >= 0 ? ydif + 1 : ydif - 1;
-    cancasDrawRect(c, x0, y0, xdif, ydif, color);
+    cancasFillRect(c, x0, y0, xdif, ydif, color);
 }
 
 #ifndef CANCAS_NO_STDIO
