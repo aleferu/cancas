@@ -103,7 +103,14 @@ void fillRectangleCoordsTest(Cancas* c, const char* filename) {
 
 void fillCircleTest(Cancas* c, const char* filename) {
     cancasInit(c, 101, 101);
-    cancasFillCircle(c, 50, 50, 50, 0xFF0000FF);
+    cancasFillCircle(c, 50, 50, 50.0, 0xFF0000FF);
+    cancasSaveToPPM(c, filename);
+    cancasDestroy(c);
+}
+
+void fillEllipseTest(Cancas* c, const char* filename) {
+    cancasInit(c, 101, 101);
+    cancasFillEllipse(c, 50, 50, 50.0f, 25.0f, 0xFF0000FF);
     cancasSaveToPPM(c, filename);
     cancasDestroy(c);
 }
@@ -122,6 +129,7 @@ int main(void) {
     fillRectangleTest2(&c, "fillRectangleTest2.ppm");
     fillRectangleCoordsTest(&c, "fillRectangleCoords.ppm");
     fillCircleTest(&c, "fillCircle.ppm");
+    fillEllipseTest(&c, "fillEllipse.ppm");
 
     return 0;
 }
