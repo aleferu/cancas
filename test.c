@@ -1,4 +1,4 @@
-// Copyright 2023 Alejandro Fernández <aleferu888@gmail.com>
+// Copyright 2024 Alejandro Fernández <aleferu888@gmail.com>
 
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -101,6 +101,13 @@ void fillRectangleCoordsTest(Cancas* c, const char* filename) {
     cancasDestroy(c);
 }
 
+void fillCircleTest(Cancas* c, const char* filename) {
+    cancasInit(c, 101, 101);
+    cancasFillCircle(c, 50, 50, 50, 0xFF0000FF);
+    cancasSaveToPPM(c, filename);
+    cancasDestroy(c);
+}
+
 int main(void) {
     Cancas c = {0};
     pixelTest(&c, "pixelTest.ppm");
@@ -114,6 +121,7 @@ int main(void) {
     fillRectangleTest1(&c, "fillRectangleTest1.ppm");
     fillRectangleTest2(&c, "fillRectangleTest2.ppm");
     fillRectangleCoordsTest(&c, "fillRectangleCoords.ppm");
+    fillCircleTest(&c, "fillCircle.ppm");
 
     return 0;
 }

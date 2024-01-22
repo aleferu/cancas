@@ -1,4 +1,4 @@
-// Copyright 2023 Alejandro Fernández <aleferu888@gmail.com>
+// Copyright 2024 Alejandro Fernández <aleferu888@gmail.com>
 
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -55,7 +55,7 @@ extern "C" {
 #endif // CANCAS_STATIC
 #endif // CANCAS
 
-#define CANCAS_ABS(x) ((x) >= 0 ? (x) : -(x))
+#define CANCAS_ABS(x) ((x) >= (0) ? (x) : -(x))
 #define CANCAS_MAX(x, y) ((x) >= (y) ? (x) : (y))
 
 typedef struct {
@@ -73,6 +73,7 @@ CANCAS void cancasDrawRect(Cancas* c, int x, int y, int w, int h, uint32_t color
 CANCAS void cancasDrawRectCoords(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
 CANCAS void cancasFillRect(Cancas* c, int x, int y, int w, int h, uint32_t color);
 CANCAS void cancasFillRectCoords(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
+CANCAS void cancasFillCircle(Cancas* c, int x, int y, int r, uint32_t color);
 #ifndef CANCAS_NO_STDIO
 CANCAS void cancasSaveToPPM(Cancas* c, const char* name);
 CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name);
@@ -170,6 +171,19 @@ CANCAS void cancasFillRectCoords(Cancas* c, int x0, int y0, int x1, int y1, uint
     xdif = xdif >= 0 ? xdif + 1 : xdif - 1;
     ydif = ydif >= 0 ? ydif + 1 : ydif - 1;
     cancasFillRect(c, x0, y0, xdif, ydif, color);
+}
+
+// maybe change to float?
+CANCAS void cancasFillCircle(Cancas* c, int x, int y, int r, uint32_t color) {
+    for (int i = x - r; i <= x + r; ++i) {
+        for (int j = y - r; j <= y + r; ++j) {
+            int dx = CANCAS_ABS(i - x);
+            int dy = CANCAS_ABS(j - y);
+            if (dx * dx + dy * dy <= r * r) {
+                cancasDrawPixel(c, i, j, color);
+            }
+        }
+    }
 }
 
 #ifndef CANCAS_NO_STDIO
