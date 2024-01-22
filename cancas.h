@@ -41,7 +41,7 @@ extern "C" {
 #include <stdlib.h>
 #define CANCAS_MALLOC malloc
 #define CANCAS_FREE free
-#elif defined(CANCAS_MALLOC) && defined(CANCAS_MALLOC)
+#elif defined(CANCAS_MALLOC) && defined(CANCAS_FREE)
 // ok, custom
 #else
 #error "Must define all or none of CANCAS_MALLOC and CANCAS_FREE"
