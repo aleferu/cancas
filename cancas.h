@@ -75,6 +75,7 @@ CANCAS void cancasFillRect(Cancas* c, int x, int y, int w, int h, uint32_t color
 CANCAS void cancasFillRectCoords(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
 CANCAS void cancasFillCircle(Cancas* c, int x, int y, float r, uint32_t color);
 CANCAS void cancasFillEllipse(Cancas* c, int x, int y, float a, float b, uint32_t color);
+CANCAS void cancasDrawTriangle(Cancas *c, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t color);
 #ifndef CANCAS_NO_STDIO
 CANCAS void cancasSaveToPPM(Cancas* c, const char* name);
 CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name);
@@ -188,6 +189,12 @@ CANCAS void cancasFillEllipse(Cancas* c, int x, int y, float a, float b, uint32_
             }
         }
     }
+}
+
+CANCAS void cancasDrawTriangle(Cancas *c, int x1, int y1, int x2, int y2, int x3, int y3, uint32_t color) {
+    cancasDrawLine(c, x1, y1, x2, y2, color);
+    cancasDrawLine(c, x1, y1, x3, y3, color);
+    cancasDrawLine(c, x2, y2, x3, y3, color);
 }
 
 #ifndef CANCAS_NO_STDIO
