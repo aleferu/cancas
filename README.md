@@ -11,11 +11,11 @@ Cancas c = {0};
 cancasInitColor(&c, 10, 20, 0xFF00FFFF);
 ```
 
-Color is a ```uint32_t``` and it should be treated as 0xAlphaBlueGreenRed, with two bytes per section. I know the alpha section does nothing currently but it could come in handy.
+Color is a ```uint32_t``` and it should be treated as 0xAlphaBlueGreenRed, with one byte per section. I know the alpha section does nothing currently but it could come in handy in graphics applications.
 
 After you have your struct you can modify its pixels using the functions provided, they are self-explanatory. You can check the examples provided at ```test.c```.
 
-Remember to clear its memory using ```cancasDestroy```.
+You can free its memory using ```cancasDestroy```. A malloc version of ```cancasInit``` will soon be added.
 
 ## Tests
 
