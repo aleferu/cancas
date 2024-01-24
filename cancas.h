@@ -149,7 +149,7 @@ CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t c
         float yinc = y0 < y1 ? (dy / steps) : (-dy / steps);
         float x = (float) x0;
         float y = (float) y0;
-        for (size_t _ = 0; _ < steps + 1; ++_) {
+        for (size_t _ = 0; (float) _ < steps + 1; ++_) {
             cancasDrawPixel(c, (int) x, (int) y, color);
             x += xinc;
             y += yinc;
