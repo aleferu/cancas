@@ -68,6 +68,7 @@ CANCAS Cancas* cancasInitM(size_t width, size_t height);
 CANCAS void cancasInitColor(Cancas* c, size_t width, size_t height, uint32_t color);
 CANCAS Cancas* cancasInitColorM(size_t width, size_t height, uint32_t color);
 CANCAS void cancasDestroy(Cancas* c);
+CANCAS void cancasDestroyM(Cancas* c);
 CANCAS inline void cancasFill(Cancas* c, uint32_t color);
 CANCAS inline void cancasDrawPixel(Cancas* c, int x, int y, uint32_t color);
 CANCAS void cancasDrawLine(Cancas* c, int x0, int y0, int x1, int y1, uint32_t color);
