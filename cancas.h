@@ -114,10 +114,12 @@ CANCAS Cancas* cancasInitColorM(size_t width, size_t height, uint32_t color) {
 }
 
 CANCAS void cancasDestroy(Cancas* c) {
-    if (c->pixels != NULL) {
-        CANCAS_FREE(c->pixels);
-        c->pixels = NULL;
-    }
+    CANCAS_FREE(c->pixels);
+}
+
+CANCAS void cancasDestroyM(Cancas* c) {
+    cancasDestroy(c);
+    CANCAS_FREE(c);
 }
 
 CANCAS inline void cancasFill(Cancas* c, uint32_t color) {
