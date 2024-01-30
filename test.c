@@ -122,6 +122,22 @@ void drawTriangleTest(Cancas* c, const char* filename) {
     cancasDestroy(c);
 }
 
+void cancasResizeTest1(Cancas* c, const char* filename) {
+    cancasInit(c, 50, 50);
+    cancasFillCircle(c, 50, 50, 50, 0xFF0000FF);
+    cancasResize(c, 100, 100);
+    cancasSaveToPPM(c, filename);
+    cancasDestroy(c);
+}
+
+void cancasResizeTest2(Cancas* c, const char* filename) {
+    cancasInit(c, 100, 100);
+    cancasFillCircle(c, 50, 50, 50, 0xFF0000FF);
+    cancasResize(c, 50, 50);
+    cancasSaveToPPM(c, filename);
+    cancasDestroy(c);
+}
+
 int main(void) {
     Cancas c = {0};
     pixelTest(&c, "pixelTest.ppm");
@@ -138,6 +154,8 @@ int main(void) {
     fillCircleTest(&c, "fillCircle.ppm");
     fillEllipseTest(&c, "fillEllipse.ppm");
     drawTriangleTest(&c, "drawTriangle.ppm");
+    cancasResizeTest1(&c, "cancasResize1.ppm");
+    cancasResizeTest2(&c, "cancasResize2.ppm");
 
     return 0;
 }

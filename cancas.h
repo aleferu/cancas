@@ -57,6 +57,9 @@ extern "C" {
 
 #define CANCAS_ABS(x) ((x) >= (0) ? (x) : -(x))
 #define CANCAS_MAX(x, y) ((x) >= (y) ? (x) : (y))
+#define CANCAS_MIN(x, y) ((x) <= (y) ? (x) : (y))
+
+#define CANCAS_DEFAULT_COLOR (0xFF000000)
 
 typedef struct {
     uint32_t* pixels;
@@ -67,6 +70,8 @@ CANCAS void cancasInit(Cancas* c, size_t width, size_t height);
 CANCAS Cancas* cancasInitM(size_t width, size_t height);
 CANCAS void cancasInitColor(Cancas* c, size_t width, size_t height, uint32_t color);
 CANCAS Cancas* cancasInitColorM(size_t width, size_t height, uint32_t color);
+CANCAS void cancasResize(Cancas* c, size_t width, size_t height);
+CANCAS void cancasResizeColor(Cancas* c, size_t width, size_t height, uint32_t color);
 CANCAS void cancasDestroy(Cancas* c);
 CANCAS void cancasDestroyM(Cancas* c);
 CANCAS inline void cancasFill(Cancas* c, uint32_t color);
@@ -93,11 +98,11 @@ CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name);
 #ifdef CANCAS_IMPLEMENTATION
 
 CANCAS void cancasInit(Cancas* c, size_t width, size_t height) {
-    cancasInitColor(c, width, height, 0xFF000000);
+    cancasInitColor(c, width, height, CANCAS_DEFAULT_COLOR);
 }
 
 CANCAS Cancas* cancasInitM(size_t width, size_t height) {
-    return cancasInitColorM(width, height, 0xFF000000);
+    return cancasInitColorM(width, height, CANCAS_DEFAULT_COLOR);
 }
 
 CANCAS void cancasInitColor(Cancas* c, size_t width, size_t height, uint32_t color) {
@@ -112,6 +117,43 @@ CANCAS Cancas* cancasInitColorM(size_t width, size_t height, uint32_t color) {
     Cancas* c = (Cancas*) CANCAS_MALLOC(sizeof(Cancas));
     cancasInitColor(c, width, height, color);
     return c;
+}
+
+CANCAS void cancasResize(Cancas* c, size_t newWidth, size_t newHeight) {
+    cancasResizeColor(c, newWidth, newHeight, CANCAS_DEFAULT_COLOR);
+}
+
+CANCAS void cancasResizeColor(Cancas* c, size_t newWidth, size_t newHeight, uint32_t color) {
+    size_t oldWidth = c->width;
+    size_t oldHeight = c->height;
+    uint32_t* oldPixels = c->pixels;
+
+    c->width = newWidth;
+    c->height = newHeight;
+    c->pixels = (uint32_t*)CANCAS_MALLOC(sizeof(uint32_t) * newWidth * newHeight);
+    CANCAS_ASSERT(c->pixels != NULL && "Memory allocation of pixels failed. More RAM needed?");
+
+
+    size_t minWidth = CANCAS_MIN(oldWidth, newWidth);
+    size_t minHeight = CANCAS_MIN(oldHeight, newHeight);
+
+    for (size_t j = 0; j < minHeight; ++j) {
+        for (size_t i = 0; i < minWidth; ++i) {
+            cancasDrawPixel(c, (int)i, (int)j, oldPixels[j * oldWidth + i]);
+        }
+
+        for (size_t i = minWidth; i < newWidth; ++i) {
+            cancasDrawPixel(c, (int)i, (int)j, color);
+        }
+    }
+    for (size_t j = minHeight; j < newHeight; ++j) {
+        for (size_t i = 0; i < newWidth; ++i) {
+            cancasDrawPixel(c, (int)i, (int)j, color);
+        }
+    }
+
+    // Free the old pixel data
+    CANCAS_FREE(oldPixels);
 }
 
 CANCAS void cancasDestroy(Cancas* c) {
@@ -219,6 +261,7 @@ CANCAS void cancasSaveToPPM(Cancas* c, const char* name) {
         fprintf(stderr, "Could not open file %s\n", name);
         return;
     }
+
     fprintf(f, "P6\n%zu %zu\n255\n", c->width, c->height);
     uint8_t buff[3];
     for (size_t i = 0; i < (c->width * c->height); ++i) {
@@ -236,6 +279,7 @@ CANCAS void cancasSaveToReadablePPM(Cancas* c, const char* name) {
         fprintf(stderr, "Could not open file %s\n", name);
         return;
     }
+
     fprintf(f, "P3\n%zu %zu\n255\n", c->width, c->height);
     for (size_t i = 0; i < (c->width * c->height); ++i) {
         uint8_t r = c->pixels[i] >> (8 * 0) & 0xFF;
